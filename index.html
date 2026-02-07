@@ -202,7 +202,7 @@ audio{display:none}
 <div id="mainSite">
 
 <audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="assets/music.mp3" type="audio/mpeg">
 </audio>
 
 <div class="question" id="question">
@@ -216,12 +216,12 @@ audio{display:none}
 
 <div class="scene">
   <div class="boy" id="boy">
-    <img id="boyImg" src="boy.png">
+    <img id="boyImg" src="assets/boy.png">
     <div class="rose">🌹</div>
   </div>
 
   <div class="girl">
-    <img id="girlImg" src="girl.png">
+    <img id="girlImg" src="assets/girl.png">
   </div>
 </div>
 
@@ -255,8 +255,8 @@ function yesClicked(){
   controls.classList.add('hide');
   question.style.opacity='0';
   boy.classList.add('approach');
-  boyImg.src='boy_accept.png';
-  girlImg.src='girl_accept.png';
+  boyImg.src='assets/boy_accept.png';
+  girlImg.src='assets/girl_accept.png';
   music.play();
   setTimeout(()=>wish.classList.add('show'),900);
   hearts();
