@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Private Rose 🌹</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== LOCK SCREEN ===== */
+body{
+  height:100vh;
+  font-family:'Poppins',sans-serif;
+  background:radial-gradient(circle at top,#2b0036,#05010d 70%);
+  color:#fff;
+  overflow:hidden;
+}
+
+#lockScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  z-index:999;
+}
+
+#lockScreen h1{
+  font-family:'Pacifico',cursive;
+  font-size:34px;
+  margin-bottom:12px;
+  color:#ff7abf;
+}
+
+#lockScreen p{
+  opacity:.85;
+  margin-bottom:18px;
+}
+
+#lockScreen input{
+  padding:12px 18px;
+  border-radius:25px;
+  border:none;
+  font-size:16px;
+  outline:none;
+  text-align:center;
+  margin-bottom:14px;
+}
+
+#lockScreen button{
+  padding:12px 28px;
+  border-radius:25px;
+  border:none;
+  font-weight:700;
+  background:linear-gradient(45deg,#ff5f8f,#ff9ab8);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(255,95,143,.4);
+}
+
+/* ===== MAIN SITE (HIDDEN INITIALLY) ===== */
+#mainSite{display:none}
+
+/* floating hearts */
+.heart{
+  position:absolute;
+  font-size:18px;
+  opacity:.5;
+  animation:floatUp 10s linear infinite;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(110vh) scale(.6)}
+  to{transform:translateY(-10vh) scale(1.2)}
+}
+
+.question{
+  position:absolute;
+  top:24px;
+  width:100%;
+  text-align:center;
+  padding:0 20px;
+  font-family:'Pacifico',cursive;
+  font-size:28px;
+  color:#ff7abf;
+  z-index:5;
+  transition:.6s;
+}
+
+.wish{
+  position:absolute;
+  top:70px;
+  width:100%;
+  text-align:center;
+  font-family:'Pacifico',cursive;
+  font-size:30px;
+  color:#ff7abf;
+  opacity:0;
+  transform:scale(.9);
+  transition:1.2s ease;
+  z-index:6;
+}
+
+.wish.show{opacity:1;transform:scale(1)}
+
+.scene{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:40px;
+  padding-bottom:150px;
+  position:relative;
+}
+
+.boy,.girl{
+  width:170px;
+  animation:idle 3s ease-in-out infinite;
+}
+
+@keyframes idle{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.girl{transform:translateY(45px)}
+
+.boy.approach{
+  animation:approach 1.6s ease forwards;
+}
+
+@keyframes approach{
+  from{transform:translateX(0)}
+  to{transform:translateX(130px)}
+}
+
+img{
+  width:100%;
+  filter:drop-shadow(0 10px 25px rgba(255,0,120,.35));
+}
+
+.rose{
+  position:absolute;
+  bottom:32px;
+  right:-18px;
+  font-size:40px;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+.controls{
+  position:absolute;
+  bottom:45px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  z-index:10;
+  transition:.6s;
+}
+
+.controls.hide{opacity:0;pointer-events:none}
+
+button{
+  padding:14px 32px;
+  border-radius:32px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(45deg,#ff5f8f,#ff9ab8);
+  color:#fff;
+  box-shadow:0 10px 22px rgba(255,95,143,.4);
+}
+
+audio{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- 🔒 LOCK SCREEN -->
+<div id="lockScreen">
+  <h1>🔒 A Rose for Someone Special</h1>
+  <p>Enter the secret to unlock</p>
+  <input type="password" id="pwd" placeholder="Secret password">
+  <button onclick="unlock()">Unlock 💖</button>
+</div>
+
+<!-- 💖 MAIN SITE -->
+<div id="mainSite">
+
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="question" id="question">
+  Mam, will you accept my rose? 🌹
+</div>
+
+<div class="wish" id="wish">
+  Happy Rose Day, Ahana 🌹❤️<br>
+  <span style="font-size:15px;">Forever yours, Soumya</span>
+</div>
+
+<div class="scene">
+  <div class="boy" id="boy">
+    <img id="boyImg" src="boy.png">
+    <div class="rose">🌹</div>
+  </div>
+
+  <div class="girl">
+    <img id="girlImg" src="girl.png">
+  </div>
+</div>
+
+<div class="controls" id="controls">
+  <button onclick="yesClicked()">Yes 💖</button>
+  <button onclick="noClicked()">No 🙈</button>
+</div>
+
+</div>
+
+<script>
+function unlock(){
+  const p=document.getElementById("pwd").value;
+  if(p==="ILOVESOUMYA"){
+    document.getElementById("lockScreen").style.display="none";
+    document.getElementById("mainSite").style.display="block";
+  }else{
+    alert("Wrong password 💔");
+  }
+}
+
+const boy=document.getElementById('boy');
+const boyImg=document.getElementById('boyImg');
+const girlImg=document.getElementById('girlImg');
+const wish=document.getElementById('wish');
+const question=document.getElementById('question');
+const controls=document.getElementById('controls');
+const music=document.getElementById('music');
+
+function yesClicked(){
+  controls.classList.add('hide');
+  question.style.opacity='0';
+  boy.classList.add('approach');
+  boyImg.src='boy_accept.png';
+  girlImg.src='girl_accept.png';
+  music.play();
+  setTimeout(()=>wish.classList.add('show'),900);
+  hearts();
+}
+
+function noClicked(){
+  const btn=controls.children[1];
+  btn.style.transform=`translate(${Math.random()*160-80}px,${Math.random()*120-60}px)`;
+}
+
+function hearts(){
+  for(let i=0;i<30;i++){
+    const h=document.createElement('div');
+    h.className='heart';
+    h.innerText='💗';
+    h.style.left=Math.random()*100+'vw';
+    h.style.animationDuration=6+Math.random()*4+'s';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),10000);
+  }
+}
+</script>
+
+</body>
+</html>
